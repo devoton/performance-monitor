@@ -5,4 +5,4 @@ Un tableau de bord de monitoring des performances en temps réel pour les applic
 ## Installation
 
 ```bash
-composer require otontraore/performance-monitor
+composer require devoton/performance-monitor
