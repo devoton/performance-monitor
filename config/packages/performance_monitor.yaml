@@ -1,0 +1,7 @@
+performance_monitor:
+    enabled: true
+    alerts:
+        time: 500   # Seuil pour le temps de réponse (en ms)
+        memory: 1024  # Seuil pour l'utilisation mémoire (en KB)
+        sql_queries: 10  # Seuil pour le nombre de requêtes SQL
+        sql_time: 50  # Seuil pour le temps des requêtes SQL (en ms)

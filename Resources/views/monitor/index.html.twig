@@ -1,0 +1,83 @@
+{% extends '@Twig/layout.html.twig' %}
+{% block body %}
+<h1>📊 Performance Monitor</h1>
+
+<canvas id="perfChart" width="100%" height="50"></canvas>
+
+<table border="1" cellpadding="8" style="margin-top: 2rem;">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Route</th>
+            <th>Durée (ms)</th>
+            <th>Mémoire (KB)</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for entry in entries|reverse %}
+        <tr>
+            <td>{{ entry.date }}</td>
+            <td>{{ entry.route }}</td>
+            <td>{{ entry.time_ms }}</td>
+            <td>{{ entry.memory_kb }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('perfChart').getContext('2d');
+    let chart;
+
+    function loadDataAndUpdate() {
+        fetch('/dev/monitor/data')
+            .then(res => res.json())
+            .then(entries => {
+                const labels = entries.map(e => e.date);
+                const times = entries.map(e => e.time_ms);
+                const mem = entries.map(e => e.memory_kb);
+
+                if (!chart) {
+                    chart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Durée (ms)',
+                                data: times,
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                fill: false
+                            }, {
+                                label: 'Mémoire (KB)',
+                                data: mem,
+                                borderColor: 'rgba(255, 99, 132, 1)',
+                                fill: false
+                            }]
+                        }
+                    });
+                } else {
+                    chart.data.labels = labels;
+                    chart.data.datasets[0].data = times;
+                    chart.data.datasets[1].data = mem;
+                    chart.update();
+                }
+
+                // mise à jour du tableau HTML
+                const tbody = document.querySelector("tbody");
+                tbody.innerHTML = entries.map(e => `
+                    <tr>
+                        <td>${e.date}</td>
+                        <td>${e.route}</td>
+                        <td>${e.time_ms}</td>
+                        <td>${e.memory_kb}</td>
+                    </tr>
+                `).join('');
+            });
+    }
+
+    loadDataAndUpdate(); // premier chargement
+    setInterval(loadDataAndUpdate, 3000); // toutes les 3 sec
+</script>
+
+{% endblock %}
