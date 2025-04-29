@@ -1,5 +1,5 @@
 {
-    "name": "otontraore/performance-monitor",
+    "name": "devoton/performance-monitor",
     "description": "Un tableau de bord de monitoring des performances avec notifications",
     "type": "library",
     "keywords": ["symfony", "monitoring", "performance", "mercure", "alertes"],
