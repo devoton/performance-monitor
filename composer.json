@@ -12,10 +12,7 @@
         }
     ],
     "require": {
-        "php": ">=7.4",
-        "symfony/mercure-bundle": "^0.5",
-        "symfony/mailer": "^5.0",
-        "symfony/console": "^5.0"
+        "php": ">=7.4"
     },
     "autoload": {
         "psr-4": {
